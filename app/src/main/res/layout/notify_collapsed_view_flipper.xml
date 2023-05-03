@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_collapsed_root"
+    android:layout_width="match_parent"
+    android:layout_height="64dp">
+<ImageView
+    android:id="@+id/image"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:autoStart="true"
+        android:flipInterval="50"
+        android:inAnimation="@null"
+        android:outAnimation="@null" />
+</RelativeLayout>
