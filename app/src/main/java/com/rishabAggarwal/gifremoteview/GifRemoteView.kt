@@ -9,13 +9,10 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
-import androidx.annotation.IntDef
 import com.bumptech.glide.Glide
-import com.bumptech.glide.gifdecoder.StandardGifDecoder
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPoolAdapter
-import com.bumptech.glide.load.resource.gif.GifBitmapProvider
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 
 class GifRemoteView constructor(
@@ -28,40 +25,44 @@ class GifRemoteView constructor(
     //outofmemmory error flow to the developer
     /// write size management scheme(no of frames, size of frames) for individual gif and for all gifs
 //redesign or remove memorymanager
-//    val remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
-    val listofGifs: List<GifManager> = listOf()
-
+private val remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
+    val gifManager: GifManager =GifManager()
     //constructor
 //    GifRemoteView( packageName: String, layoutId: Int){
 //
 //    }
 
 
-    public suspend fun addGif(viewId: Int, gifUrl: String) {
-//        val gifManager:GifManager = GifManager()
-        val bytes: ByteArray =
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(gifUrl)
-                .skipMemoryCache(true).submit().get()
+//    public suspend fun addGif(viewId: Int, gifUrl: String) {
+////        val gifManager:GifManager = GifManager()
+//
+//
+//                gifManager.addGif(viewId, gifUrl,applicationContext.packageName,this)
+//
+//    }
+
+
+    public fun addGif(viewId: Int, bytes: ByteArray) {
+        Log.e("TAG1", "addGif: ${bytes.size}", )
+        gifManager.addGif(viewId, bytes,applicationContext.packageName,this)
+        gifManager.optimiseGifs()
+        gifManager.populateGifs()
+
+
     }
 
-
-    public suspend fun addGif(viewId: Int, bytes: ByteArray) {
-
-        val bytes: ByteArray = bytes
-    }
-
-    private fun canAddGif(gifUrl: String) {
-
-    }
+//    private fun canAddGif(gifUrl: String) {
+//
+//    }
 
     override fun setImageViewBitmap(@IdRes viewId: Int, bitmap: Bitmap) {
-//        remoteViewMemoryManager.addImage(bitmap)
+        remoteViewMemoryManager.addImage(bitmap,null)
         setBitmap(viewId, "setImageBitmap", bitmap)
     }
 
     override fun setImageViewResource(@IdRes viewId: Int, @DrawableRes srcId: Int) {
         val bitmap: Bitmap = BitmapFactory.decodeResource(applicationContext.resources, srcId)
-//        remoteViewMemoryManager.addImage(bitmap)
+        remoteViewMemoryManager.addImage(bitmap,null)
         super.setImageViewResource(viewId, srcId)
     }
 

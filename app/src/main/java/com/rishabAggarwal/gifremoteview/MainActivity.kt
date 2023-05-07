@@ -124,8 +124,17 @@ class MainActivity : AppCompatActivity() {
             bigRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
             smallRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
         }
+        val bytes: ByteArray =
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.vinyl)
+                .skipMemoryCache(true).submit().get()
         Log.e("TAG1", "fireNotification: ${totalSize}", )
-        builder.setCustomBigContentView(bigRemoteViews)
+
+
+        val bigRemoteViewstest = GifRemoteView(applicationContext.packageName, R.layout.notify,applicationContext)
+        bigRemoteViewstest.addGif(R.id.frame_flipper,bytes)
+
+
+        builder.setCustomBigContentView(bigRemoteViewstest)
 //        builder.setCustomHeadsUpContentView( RemoteViews(Parcel.obtain()))
         builder.setCustomContentView(smallRemoteViews)
         with(NotificationManagerCompat.from(applicationContext)) {
