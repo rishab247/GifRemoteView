@@ -4,7 +4,7 @@ class GifManager {
     // setup a image scale down approch (reduce size,or reduce count) but will we do it for previour gifs
     private var remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
     private val gidCreators: MutableList<GifCreator> = mutableListOf()
-    val gifStrategy: GifStrategy = GifStrategy.AUTOMATIC
+    private val gifStrategy: GifStrategy = GifStrategy.AUTOMATIC
 
 //    suspend fun addGif(viewId: Int, gifUrl: String, packageName: String, remoteView: GifRemoteView) {
 //        val gifDecoder = GifCreator(viewId, packageName, remoteViewMemoryManager, remoteView)
@@ -19,9 +19,8 @@ class GifManager {
     }
 
     fun optimiseGifs(){
-        val optimisation = remoteViewMemoryManager.getRecommendedSizeOptimisation()
         for (gidCreator in gidCreators){
-            gidCreator.optimiseGifs(gifStrategy,optimisation)
+            gidCreator.optimiseGifs(gifStrategy)
         }
 
     }

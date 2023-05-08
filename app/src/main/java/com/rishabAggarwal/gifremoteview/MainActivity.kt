@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             smallRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
         }
         val bytes: ByteArray =
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.vinyl)
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
         Log.e("TAG1", "fireNotification: ${totalSize}", )
 

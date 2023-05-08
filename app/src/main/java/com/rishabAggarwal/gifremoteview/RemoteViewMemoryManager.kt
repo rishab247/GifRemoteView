@@ -1,6 +1,7 @@
 package com.rishabAggarwal.gifremoteview
 
 import android.graphics.Bitmap
+import android.util.Log
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
@@ -47,7 +48,7 @@ class RemoteViewMemoryManager {
     fun removeImage(image: Bitmap, uuid: UUID) {
         if (canRemoveImage(image, uuid)) {
             individualGifSize[uuid] = (individualGifSize[uuid])!! - image.byteCount
-            currentMaxSize -= image.byteCount
+            currentSize -= image.byteCount
         }
     }
 
@@ -60,12 +61,14 @@ class RemoteViewMemoryManager {
     }
 
     fun getRecommendedSizeOptimisation(): Float {
-        if (currentSize > currentMaxSize) {
-
-            val df = DecimalFormat("#.##")
+        val v= if (currentSize > currentMaxSize) {
+            val df = DecimalFormat("#.####")
             df.roundingMode = RoundingMode.DOWN
-            return df.format((currentMaxSize.toFloat() / currentSize.toFloat())).toFloat()
-        } else return 1f
+            df.format(currentMaxSize.toDouble() / currentSize.toDouble()).toFloat()
+        } else 1.toFloat()
+
+        Log.e("TAG", "getRecommendedSizeOptimisation: ${v}  ${currentMaxSize.toDouble()}   ${currentSize.toDouble()}", )
+        return v
     }
 
     fun limitMaxSize() {

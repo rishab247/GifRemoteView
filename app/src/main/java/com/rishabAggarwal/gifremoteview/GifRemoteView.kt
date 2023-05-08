@@ -43,6 +43,8 @@ private val remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryM
 
 
     public fun addGif(viewId: Int, bytes: ByteArray) {
+
+        //add warning for gif size more than 100kb and throw error for 1MB
         Log.e("TAG1", "addGif: ${bytes.size}", )
         gifManager.addGif(viewId, bytes,applicationContext.packageName,this)
         gifManager.optimiseGifs()
