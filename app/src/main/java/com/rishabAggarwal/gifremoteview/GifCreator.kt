@@ -13,7 +13,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.stream.IntStream.range
-import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -31,6 +30,7 @@ class GifCreator(
     fun addGif(gifData: ByteArray, height: Int? = null, width: Int? = null) {
         setupGif(gifData, height, width)
     }
+
     fun replaceGif(gifData: ByteArray, height: Int? = null, width: Int? = null) {
         remoteViewMemoryManager.removeGif(identifier)
         setupGif(gifData, height, width)
@@ -44,13 +44,14 @@ class GifCreator(
         for (i in 0 until frameCount) {
             var bitmap = standardGifDecoder.nextFrame
             if (bitmap != null) {
-                bitmap = bitmap.getOptimisationFrame(height, width)
+                bitmap = bitmap.getOptimisationFrame(height)
                 remoteViewMemoryManager.addImage(bitmap, identifier)
                 frames.add(bitmap)
                 sizeofFrames += bitmap.allocationByteCount
             }
             standardGifDecoder.advance()
         }
+        standardGifDecoder
     }
 
     fun populateGif() {
@@ -64,22 +65,23 @@ class GifCreator(
         }
     }
 
-    fun optimiseGifs(typeOfStrategy: GifStrategy,optimisationPercentage:Float) {
-//        val optimisationPercentage = remoteViewMemoryManager.getRecommendedSizeOptimisation()
-        Log.e("TAG1", "optimiseGifs: ${typeOfStrategy}")
-        when (typeOfStrategy) {
-            is GifStrategy.AUTOMATIC-> {
+    fun optimiseGifs(
+        gifOptimisationStrategy: GifOptimisationStrategy,
+        optimisationPercentage: Float
+    ) {
+        Log.e("TAG1", "optimiseGifs: ${gifOptimisationStrategy}")
+        when (gifOptimisationStrategy) {
+            is GifOptimisationStrategy.AUTOMATIC -> {
                 val reductionPercentage = 1 - optimisationPercentage
                 val frameOptimisationPercentage = reductionPercentage * optimisationRatio
-                val frameSizeOptimisationPercentagetemp = reductionPercentage * (1 - optimisationRatio)
+                val frameSizeOptimisationPercentagetemp =
+                    reductionPercentage * (1 - optimisationRatio)
                 Log.e(
                     "TAG1",
                     "optimiseGifs: ${frameSizeOptimisationPercentagetemp}   ${frameOptimisationPercentage}      total${1 - (frameOptimisationPercentage + frameSizeOptimisationPercentagetemp)}  optimise${optimisationPercentage}    reduction${reductionPercentage} sum${((frameOptimisationPercentage) + (frameSizeOptimisationPercentagetemp))}",
                 )
 
                 optimiseFrames(1 - frameOptimisationPercentage)
-//                val frameSizeOptimisationPercentage =
-//                    remoteViewMemoryManager.getRecommendedSizeOptimisation()
                 Log.e(
                     "TAG1",
                     "optimiseGifs:  ${optimisationPercentage} ${1 - frameOptimisationPercentage} ${1 - frameSizeOptimisationPercentagetemp}",
@@ -87,16 +89,24 @@ class GifCreator(
                 optimiseFrameSize(frameSizeOptimisationPercentagetemp)
             }
 
-            GifStrategy.OPTIMISE_FRAMES -> {
+            GifOptimisationStrategy.OPTIMISE_QUALITY -> {
                 optimiseFrames(optimisationPercentage)
             }
 
-            GifStrategy.OPTIMISE_SIZE -> {
+
+            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS -> {
                 optimiseFrameSize(optimisationPercentage)
 
             }
 
-            GifStrategy.NONE -> {
+            GifOptimisationStrategy.OPTIMISE_LENGTH -> {
+
+                //TODO
+//                optimiseFrames(optimisationPercentage)
+            }
+
+
+            GifOptimisationStrategy.NONE -> {
                 return
             }
 
@@ -142,13 +152,16 @@ class GifCreator(
             remoteViewMemoryManager.addImage(optimisedFrame, identifier)
             size += optimisedFrame.allocationByteCount
             frames[i] = optimisedFrame
-            Log.e(
-                "TAG1",
-                "optimiseFrameSize: optimisationPercentage $optimisationPercentage currentFrame${currentFrame.allocationByteCount}  optimisedFrame${optimisedFrame.allocationByteCount}",
-            )
+//            Log.e(
+//                "TAG1",
+//                "optimiseFrameSize:currentFrame${currentFrame.allocationByteCount}  optimisedFrame${optimisedFrame.allocationByteCount}",
+//            )
         }
-        Log.e("TAG1", "optimiseFrameSize1 $size   $oldSize")
 
+        Log.e(
+            "TAG1",
+            "optimiseFrameSize1 $size   $oldSize     optimisationPercentage $optimisationPercentage "
+        )
     }
 
     private fun getGifDecoder(gifData: ByteArray): StandardGifDecoder {
@@ -158,9 +171,9 @@ class GifCreator(
         return standardGifDecoder
     }
 
-    private fun Bitmap.getOptimisationFrame(height: Int? = null, width: Int? = null): Bitmap {
+    private fun Bitmap.getOptimisationFrame(height: Int? = null): Bitmap {
         // Basically shrinking it to max possible size
-        var newWidth = width ?: 0
+        var newWidth = 0
         var newHeight = height ?: getMaxHeightInPixel()
         // If already smaller than 480p do not scale else scale
         if (this.height < newHeight) {
@@ -170,10 +183,10 @@ class GifCreator(
             val ratio: Float = (this.height.toFloat() / this.width.toFloat())
             newWidth = (newHeight / ratio).toInt()
         }
-        Log.e(
-            "TAG1",
-            "getCompressedFrame:1 ${this.width}   ${this.height}    ${newWidth}   d ${newHeight}   new${getMaxHeightInPixel()}"
-        )
+//        Log.e(
+//            "TAG1",
+//            "getCompressedFrame:1 ${this.width}   ${this.height}    ${newWidth}   d ${newHeight}   new${getMaxHeightInPixel()}"
+//        )
 
         return Bitmap.createBitmap(this, 0, 0, newWidth, newHeight, Matrix(), false)
     }
@@ -183,12 +196,12 @@ class GifCreator(
     }
 
     private fun Bitmap.getCompressedFrame(optimisationPercentage: Float): Bitmap {
-        val scalingFactor =getScalingFactor(width, height,optimisationPercentage)
-        Log.e("TAG1", "getscale $scalingFactor  $optimisationPercentage ${width} $height", )
+        val scalingFactor = getScalingFactor(width, height, optimisationPercentage)
+//        Log.e("TAG1", "getscale $scalingFactor  $optimisationPercentage ${width} $height", )
 
 
         val mat = Matrix()
-        mat.setScale(scalingFactor , scalingFactor);
+        mat.setScale(scalingFactor, scalingFactor);
         val bitmap = Bitmap.createBitmap(this, 0, 0, width, height, mat, false)
 //        Log.e(
 //            "TAG1",
@@ -205,18 +218,20 @@ class GifCreator(
 //        )
         return bitmap
     }
+
     private fun getScalingFactor(width: Int, height: Int, optimisationPercentage: Float): Float {
         val area = width * height
         val optimisedArea = area * optimisationPercentage
-        val ratio = height.toFloat()/width.toFloat()
+        val ratio = height.toFloat() / width.toFloat()
         val newHeight = floor(sqrt(optimisedArea * ratio))
 
-        Log.e("TAG1", "getScalingFactor: $area  $optimisedArea  $ratio  $newHeight  $height $width", )
+//        Log.e("TAG1", "getScalingFactor: $area  $optimisedArea  $ratio  $newHeight  $height $width", )
 
         val df = DecimalFormat("#.###")
         df.roundingMode = RoundingMode.DOWN
         return df.format(newHeight / height).toFloat()
     }
+
     private fun getMaxHeightInPixel(): Int {
         var maxHeightInDP = 0
         maxHeightInDP = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

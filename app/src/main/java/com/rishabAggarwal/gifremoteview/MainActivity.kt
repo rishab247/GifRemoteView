@@ -10,13 +10,16 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.RemoteViews
 import androidx.annotation.AnyRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.gifdecoder.StandardGifDecoder
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPoolAdapter
@@ -103,62 +106,52 @@ class MainActivity : AppCompatActivity() {
 //            ).setContentTitle("notificationTitle11").setContentText("notificationContent11")
             .setPriority(NotificationCompat.PRIORITY_MAX)
 
-
-        val bigRemoteViews = RemoteViews(applicationContext.packageName, R.layout.notify)
-        val smallRemoteViews =
-            RemoteViews(applicationContext.packageName, R.layout.notify_collapsed_view_flipper)
-        val standardGifDecoder = setupgifdecoder(applicationContext)
-        val frameCount = standardGifDecoder.frameCount
-        standardGifDecoder.advance()
-        var totalSize = 0L
-        for (i in 0 until frameCount) {
-            val delay = standardGifDecoder.nextDelay
-            val bitmap = standardGifDecoder.nextFrame?.getCompressedFrame()
-            totalSize += bitmap!!.allocationByteCount
-            val v = RemoteViews(applicationContext.packageName, R.layout.view_single_frame)
-            v.setImageViewBitmap(R.id.frame, bitmap)
-            bigRemoteViews.addView(R.id.frame_flipper, v)
-            smallRemoteViews.addView(R.id.frame_flipper, v)
-
-            standardGifDecoder.advance()
-            bigRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
-            smallRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
-        }
+//
+//        val bigRemoteViews = RemoteViews(applicationContext.packageName, R.layout.notify)
+//        val smallRemoteViews =
+//            RemoteViews(applicationContext.packageName, R.layout.notify_collapsed_view_flipper)
+//        val standardGifDecoder = setupgifdecoder(applicationContext)
+//        val frameCount = standardGifDecoder.frameCount
+//        standardGifDecoder.advance()
+//        var totalSize = 0L
+//        for (i in 0 until frameCount) {
+//            val delay = standardGifDecoder.nextDelay
+//            val bitmap = standardGifDecoder.nextFrame?.getCompressedFrame()
+//            totalSize += bitmap!!.allocationByteCount
+//            val v = RemoteViews(applicationContext.packageName, R.layout.view_single_frame)
+//            v.setImageViewBitmap(R.id.frame, bitmap)
+//            bigRemoteViews.addView(R.id.frame_flipper, v)
+//            smallRemoteViews.addView(R.id.frame_flipper, v)
+//
+//            standardGifDecoder.advance()
+//            bigRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
+//            smallRemoteViews.setInt(R.id.frame_flipper, "setFlipInterval", delay)
+//        }
         val bytes: ByteArray =
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
-//        Log.e("TAG1", "fireNotification: ${totalSize}", )
-
-
         val bigRemoteViewstest =
-            GifRemoteView(applicationContext.packageName, R.layout.notify, applicationContext)
-        bigRemoteViewstest.addGif(R.id.frame_flipper, bytes, 150, 100)
-        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
-//        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
-//        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
-//        bigRemoteViewstest. setImageViewResource(R.id.image,R.drawable.image)
-//        bigRemoteViewstest. setImageViewResource(R.id.image1,R.drawable.largeimage)
-//        bigRemoteViewstest. setImageViewResource(R.id.image2,R.drawable.image)
+            GifRemoteView(applicationContext.packageName, R.layout.notify, applicationContext,limitRemoteViewSize = true)
 
+        val smallRemoteViews =
+            GifRemoteView(applicationContext.packageName, R.layout.notify_collapsed_view_flipper, applicationContext,limitRemoteViewSize = true)
 
-//        bigRemoteViewstest.setInt(
-//            R.id.image,"setBackgroundResource" ,R.drawable.largeimage)
-//
-//        bigRemoteViewstest.setInt(
-//            R.id.image1,"setBackgroundResource" ,R.drawable.image)
-//
-//        bigRemoteViewstest.setInt(
-//            R.id.image2,"setBackgroundResource" ,R.drawable.largeimage)
+        smallRemoteViews.addGif(R.id.frame_flipper, bytes, 150, 150,GifOptimisationStrategy.OPTIMISE_SMOOTHNESS)
+        smallRemoteViews.publishGifs()
+        Log.e("TAG11", "fireNotification: start", )
+        bigRemoteViewstest.addGif(R.id.frame_flipper, bytes, 150, 100,GifOptimisationStrategy.OPTIMISE_SMOOTHNESS)
+        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100,GifOptimisationStrategy.OPTIMISE_SMOOTHNESS)
+//        bigRemoteViewstest.setImageViewBitmap(R.id.image2,
+//            AppCompatResources.getDrawable(this.baseContext, R.drawable.largeimage)?.toBitmap()!! )
+        bigRemoteViewstest.setBitmap(R.id.image2,"setImageBitmap", AppCompatResources.getDrawable(this.baseContext, R.drawable.image)?.toBitmap(210.toPx.toInt(),210.toPx.toInt(),Bitmap.Config.RGB_565)!!  )
 
+//        bigRemoteViewstest.setImageViewBitmap(R.id.image2,
+//            AppCompatResources.getDrawable(this.baseContext, R.drawable.largeimage)?.toBitmap()!! )
 
-//        bigRemoteViewstest.setImageViewBitmap(R.id.image1, R.drawable.image)
-//        bigRemoteViewstest. setImageViewBitmap(R.id.image2,
-//            BitmapFactory.decodeResource(getResources(), R.drawable.image))
         bigRemoteViewstest.publishGifs()
-
         builder.setCustomBigContentView(bigRemoteViewstest)
-//        builder.setCustomHeadsUpContentView( RemoteViews(Parcel.obtain()))
         builder.setCustomContentView(smallRemoteViews)
+        builder.setCustomHeadsUpContentView(smallRemoteViews)
         with(NotificationManagerCompat.from(applicationContext)) {
 
             notify(222, builder.build())

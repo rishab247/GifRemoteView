@@ -4,10 +4,9 @@ import android.util.Log
 
 class GifManager {
     // setup a image scale down approch (reduce size,or reduce count) but will we do it for previour gifs
-    private var remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
-    private val gidCreators: HashMap<Int, GifCreator> = hashMapOf()
-    private val gifStrategy: GifStrategy = GifStrategy.AUTOMATIC()
-
+    private lateinit var remoteViewMemoryManager: RemoteViewMemoryManager
+    private val gifCreators: HashMap<Int, GifCreator> = hashMapOf()
+    private val gifOptimisationStrategyMapping: HashMap<Int,GifOptimisationStrategy> = hashMapOf()
     /*
     height- is the max height in the dp
     width- is the max width in the dp
@@ -18,56 +17,51 @@ class GifManager {
         packageName: String,
         remoteView: GifRemoteView,
         height: Int? = null,
-        width: Int? = null
+        width: Int? = null,
+        gifOptimisationStrategy:GifOptimisationStrategy = GifOptimisationStrategy.AUTOMATIC(),
+        remoteViewMemoryManager: RemoteViewMemoryManager
     ) {
-        var gidCreator = gidCreators.getOrDefault(
+        this.remoteViewMemoryManager = remoteViewMemoryManager
+        var gifCreator = gifCreators.getOrDefault(
             viewId,
             null
         )
-        if (gidCreator != null) {
-            gidCreator.replaceGif(gifData, height?.toPx?.toInt(), width?.toPx?.toInt())
+        if (gifCreator != null) {
+            gifCreator.replaceGif(gifData, height?.toPx?.toInt(), width?.toPx?.toInt())
         } else {
-            Log.e("TAG111", "GifCreatorFactory: ${gidCreator.hashCode()}")
-            gidCreator = GifCreator(viewId, packageName, remoteViewMemoryManager, remoteView)
-            gidCreator.addGif(gifData, height?.toPx?.toInt(), width?.toPx?.toInt())
-            gidCreators[viewId] = gidCreator
+            Log.e("TAG111", "GifCreatorFactory: ${gifCreator.hashCode()}")
+            gifCreator = GifCreator(viewId, packageName, remoteViewMemoryManager, remoteView)
+            gifCreator.addGif(gifData, height?.toPx?.toInt(), width?.toPx?.toInt())
+            gifCreators[viewId] = gifCreator
         }
+        gifOptimisationStrategyMapping[viewId] = gifOptimisationStrategy
 
     }
 
     fun optimiseGifs() {
-
-        for (gidCreator in gidCreators){
-            Log.e("TAG122", "GifCreatorFactory: ${gidCreator.key} ", )
-
-        }
-
-
         val optimisationPercentage = remoteViewMemoryManager.getRecommendedSizeOptimisation()
-//        Log.e("TAG1", "optimiseGifs: ${optimisationPercentage}")
-
-        for (gidCreator in gidCreators) {
-
-            gidCreator.value.optimiseGifs(gifStrategy, optimisationPercentage)
+        for (gifCreator in gifCreators) {
+            gifCreator.value.optimiseGifs(gifOptimisationStrategyMapping.getOrDefault(gifCreator.key,GifOptimisationStrategy.AUTOMATIC()), optimisationPercentage)
         }
 
     }
 
     fun populateGifs() {
-        for (gidCreator in gidCreators) {
-            gidCreator.value.populateGif()
+        for (gifCreator in gifCreators) {
+            gifCreator.value.populateGif()
         }
     }
 
 }
 
 
-sealed class GifStrategy {
-    object OPTIMISE_SIZE : GifStrategy()
-    object OPTIMISE_FRAMES : GifStrategy()
+sealed class GifOptimisationStrategy {
+    object OPTIMISE_SMOOTHNESS : GifOptimisationStrategy()
+    object OPTIMISE_QUALITY : GifOptimisationStrategy()
+    object OPTIMISE_LENGTH : GifOptimisationStrategy()
     //Not Recommended
-    object NONE : GifStrategy()
+    object NONE : GifOptimisationStrategy()
     data class AUTOMATIC(
         val optimisationRatio: Float = Config.optimisationRatio,
-    ) : GifStrategy()
+    ) : GifOptimisationStrategy()
 }
