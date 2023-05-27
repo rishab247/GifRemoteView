@@ -9,7 +9,7 @@ import java.util.UUID
 
 class RemoteViewMemoryManager {
 
-    /*  Functionality
+    /*  Functionality(done)
         store  size of individual gifcreator
         store cumulative size of all gifcreator
         get size optimisation percentage
@@ -50,11 +50,8 @@ class RemoteViewMemoryManager {
                 removeImage(image)
             }
             individualimageSize[viewId] = (individualimageSize[viewId] ?: 0) + image.byteCount
-            Log.e("TAG1", "addImage:$currentSize  ${individualimageSize[viewId]} image.byteCount ${image.byteCount}")
         }
         currentSize += image.byteCount
-        Log.e("TAG1", "addImage1: uuid  $uuid   currentSize ${currentSize}  individualimageSize${individualimageSize.size} viewid${individualimageSize[viewId] }   }")
-
     }
 
     fun removeImage(image: Bitmap, uuid: UUID) {
@@ -88,25 +85,17 @@ class RemoteViewMemoryManager {
     }
 
     fun getRecommendedSizeOptimisation(): Float {
-//todo excule normal image size from this calculation
         var totalGifSize = 0
         for (i in individualGifSize) {
             totalGifSize += i.value
-            Log.e("TAG1", "individualGifSize: ${i.key}  ${i.value}")
         }
         val sizeToBeReduced = currentSize - totalGifSize
 
-        val v = if (currentSize > currentMaxSize) {
+        return if (currentSize > currentMaxSize) {
             val df = DecimalFormat("#.###")
             df.roundingMode = RoundingMode.DOWN
             df.format((currentMaxSize - sizeToBeReduced).toFloat() / (currentSize)).toFloat()
         } else 1.toFloat()
-
-        Log.e(
-            "TAG",
-            "getRecommendedSizeOptimisation1: ${v}  ${currentMaxSize}   ${currentSize}   $sizeToBeReduced  totalGifSize  ${totalGifSize}   sizeToBeReduced ${sizeToBeReduced}",
-        )
-        return v
     }
 
     fun limitMaxSize() {
