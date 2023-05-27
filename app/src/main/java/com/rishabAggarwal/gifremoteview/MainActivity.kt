@@ -5,15 +5,16 @@ import android.app.NotificationManager
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.RemoteViews
+import androidx.annotation.AnyRes
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
@@ -24,10 +25,9 @@ import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.load.resource.gif.GifBitmapProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         val smallRemoteViews =
             RemoteViews(applicationContext.packageName, R.layout.notify_collapsed_view_flipper)
         val standardGifDecoder = setupgifdecoder(applicationContext)
-        val frameCount = 14
+        val frameCount = standardGifDecoder.frameCount
         standardGifDecoder.advance()
         var totalSize = 0L
         for (i in 0 until frameCount) {
@@ -127,12 +127,34 @@ class MainActivity : AppCompatActivity() {
         val bytes: ByteArray =
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
-        Log.e("TAG1", "fireNotification: ${totalSize}", )
+//        Log.e("TAG1", "fireNotification: ${totalSize}", )
 
 
-        val bigRemoteViewstest = GifRemoteView(applicationContext.packageName, R.layout.notify,applicationContext)
-        bigRemoteViewstest.addGif(R.id.frame_flipper,bytes)
+        val bigRemoteViewstest =
+            GifRemoteView(applicationContext.packageName, R.layout.notify, applicationContext)
+        bigRemoteViewstest.addGif(R.id.frame_flipper, bytes, 150, 100)
+        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
+//        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
+//        bigRemoteViewstest.addGif(R.id.frame_flipperq, bytes, 150, 100)
+//        bigRemoteViewstest. setImageViewResource(R.id.image,R.drawable.image)
+//        bigRemoteViewstest. setImageViewResource(R.id.image1,R.drawable.largeimage)
+//        bigRemoteViewstest. setImageViewResource(R.id.image2,R.drawable.image)
 
+
+//        bigRemoteViewstest.setInt(
+//            R.id.image,"setBackgroundResource" ,R.drawable.largeimage)
+//
+//        bigRemoteViewstest.setInt(
+//            R.id.image1,"setBackgroundResource" ,R.drawable.image)
+//
+//        bigRemoteViewstest.setInt(
+//            R.id.image2,"setBackgroundResource" ,R.drawable.largeimage)
+
+
+//        bigRemoteViewstest.setImageViewBitmap(R.id.image1, R.drawable.image)
+//        bigRemoteViewstest. setImageViewBitmap(R.id.image2,
+//            BitmapFactory.decodeResource(getResources(), R.drawable.image))
+        bigRemoteViewstest.publishGifs()
 
         builder.setCustomBigContentView(bigRemoteViewstest)
 //        builder.setCustomHeadsUpContentView( RemoteViews(Parcel.obtain()))
@@ -149,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun setupgifdecoder(applicationContext: Context): StandardGifDecoder {
         val bytes: ByteArray =
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.vinyl)
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
 
         val memorySizeCalculator = MemorySizeCalculator.Builder(applicationContext).build()
@@ -177,7 +199,7 @@ class MainActivity : AppCompatActivity() {
             val ratio: Float = (width.toFloat() / height.toFloat())
             newHeight = (newWidth / ratio).toInt()
         }
-        Log.e("TAG1", "getCompressedFrame: ${width}   ${height}    ${newWidth}   d ${newHeight}")
+//        Log.e("TAG1", "getCompressedFrame: ${width}   ${height}    ${newWidth}   d ${newHeight}")
 
         return Bitmap.createScaledBitmap(this, newWidth, newHeight, false)
     }

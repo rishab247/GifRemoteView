@@ -2,6 +2,7 @@ package com.rishabAggarwal.gifremoteview
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.annotation.IdRes
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
@@ -26,6 +27,7 @@ class RemoteViewMemoryManager {
     var currentSize = 0
     private var currentMaxSize = MAX_SIZE
     private var individualGifSize: HashMap<UUID, Int> = hashMapOf()
+    private var individualimageSize: HashMap<Int, Int> = hashMapOf()
 
     fun canAddImage(image: Bitmap): Boolean {
         return (image.byteCount + currentSize) <= currentMaxSize
@@ -37,17 +39,40 @@ class RemoteViewMemoryManager {
     }
 
     @Throws(OutOfMemoryError::class)
-    fun addImage(image: Bitmap, uuid: UUID?) {
+    fun addImage(image: Bitmap, uuid: UUID?,@IdRes viewId: Int? = null) {
+        Log.e("TAG1", "addImage1: $viewId", )
         if (uuid != null) {
             individualGifSize[uuid] = (individualGifSize[uuid] ?: 0) + image.byteCount
         }
+        if(viewId!=null){
+            if(individualimageSize.getOrDefault(viewId,null)!=null){
+                removeImage(image)
+            }
+            individualimageSize[viewId] =(individualimageSize[viewId] ?: 0)+ image.byteCount
+            Log.e("TAG1", "addImage:$currentSize  ${individualimageSize[viewId]}", )
+
+        }
         currentSize += image.byteCount
+
 
     }
 
     fun removeImage(image: Bitmap, uuid: UUID) {
         if (canRemoveImage(image, uuid)) {
             individualGifSize[uuid] = (individualGifSize[uuid])!! - image.byteCount
+            currentSize -= image.byteCount
+        }
+    }
+    //this will clear Out all the images with this uid
+    fun removeGif(uuid: UUID) {
+        val sizeofGif = individualGifSize.getOrDefault(uuid, 0)
+        if (sizeofGif != 0) {
+            currentSize -= sizeofGif
+            individualGifSize[uuid] = 0
+        }
+    }
+    private fun removeImage(image: Bitmap) {
+        if((currentSize - image.byteCount) >= 0){
             currentSize -= image.byteCount
         }
     }
@@ -61,13 +86,21 @@ class RemoteViewMemoryManager {
     }
 
     fun getRecommendedSizeOptimisation(): Float {
+//todo excule normal image size from this calculation
+        var totalGifSize=0
+        for( i in individualGifSize){
+            totalGifSize+=i.value
+            Log.e("TAG1", "individualGifSize: ${i.key}  ${i.value}", )
+        }
+        val sizeToBeReduced =currentSize - totalGifSize
+
         val v= if (currentSize > currentMaxSize) {
-            val df = DecimalFormat("#.####")
+            val df = DecimalFormat("#.###")
             df.roundingMode = RoundingMode.DOWN
-            df.format(currentMaxSize.toDouble() / currentSize.toDouble()).toFloat()
+            df.format((currentMaxSize-sizeToBeReduced).toFloat() / (currentSize)).toFloat()
         } else 1.toFloat()
 
-        Log.e("TAG", "getRecommendedSizeOptimisation: ${v}  ${currentMaxSize.toDouble()}   ${currentSize.toDouble()}", )
+        Log.e("TAG", "getRecommendedSizeOptimisation1: ${v}  ${currentMaxSize}   ${currentSize }   $sizeToBeReduced", )
         return v
     }
 

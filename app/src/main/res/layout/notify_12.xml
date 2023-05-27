@@ -55,4 +55,18 @@
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
         android:autoStart="true" />
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="385dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="-80dp"
+        android:scaleType="centerCrop" />
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="385dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="0dp"
+        android:scaleType="centerCrop" />
 </RelativeLayout>
