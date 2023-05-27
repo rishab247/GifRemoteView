@@ -15,22 +15,14 @@ class GifRemoteView constructor(
     private val applicationContext: Context,
     private val limitRemoteViewSize: Boolean = false
 ) : RemoteViews(packageName, layoutId) {
-    //calculate the other bitmap sizes form varous methods
-    // setup gif creator class
-    // add check for max remoteview size
-    //funtion to override max remoteview size  according to device
-    //outofmemmory error flow to the developer
-    /// write size management scheme(no of frames, size of frames) for individual gif and for all gifs
-    //redesign or remove memorymanager
-    //max gif size check
-    // custom remoteViews Size limit
     private val remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
     private val gifManager: GifManager = GifManager()
 
     init {
         limitRemoteViewSize()
     }
-@Throws(OutOfMemoryError::class)
+
+    @Throws(OutOfMemoryError::class)
     public fun addGif(
         viewId: Int, bytes: ByteArray, height: Int? = null,
         width: Int? = null,

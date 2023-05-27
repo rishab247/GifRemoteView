@@ -8,20 +8,9 @@ import java.text.DecimalFormat
 import java.util.UUID
 
 class RemoteViewMemoryManager {
-
-    /*  Functionality(done)
-        store  size of individual gifcreator
-        store cumulative size of all gifcreator
-        get size optimisation percentage
-        limit the total size of remoteView
-
-     */
-
-
     companion object {
         const val MAX_SIZE = 5000000
         const val MAX_SIZE_EXCEPTION_CASE = 2000000
-
     }
 
     var currentSize = 0

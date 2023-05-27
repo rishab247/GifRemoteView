@@ -90,7 +90,6 @@ class GifCreator(
                 //TODO
             }
 
-
             GifOptimisationStrategy.NONE -> {
                 return
             }
@@ -148,7 +147,6 @@ class GifCreator(
         // Basically shrinking it to max possible size
         var newWidth = 0
         var newHeight = height ?: getMaxHeightInPixel()
-        // If already smaller than 480p do not scale else scale
         if (this.height < newHeight) {
             newWidth = this.width
             newHeight = this.height

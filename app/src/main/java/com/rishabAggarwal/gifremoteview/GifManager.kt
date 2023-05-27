@@ -3,7 +3,8 @@ package com.rishabAggarwal.gifremoteview
 class GifManager {
     private lateinit var remoteViewMemoryManager: RemoteViewMemoryManager
     private val gifCreators: HashMap<Int, GifCreator> = hashMapOf()
-    private val gifOptimisationStrategyMapping: HashMap<Int,GifOptimisationStrategy> = hashMapOf()
+    private val gifOptimisationStrategyMapping: HashMap<Int, GifOptimisationStrategy> = hashMapOf()
+
     /*
     height- is the max height in the dp
     width- is the max width in the dp
@@ -15,13 +16,12 @@ class GifManager {
         remoteView: GifRemoteView,
         height: Int? = null,
         width: Int? = null,
-        gifOptimisationStrategy:GifOptimisationStrategy = GifOptimisationStrategy.AUTOMATIC(),
+        gifOptimisationStrategy: GifOptimisationStrategy = GifOptimisationStrategy.AUTOMATIC(),
         remoteViewMemoryManager: RemoteViewMemoryManager
     ) {
         this.remoteViewMemoryManager = remoteViewMemoryManager
         var gifCreator = gifCreators.getOrDefault(
-            viewId,
-            null
+            viewId, null
         )
         if (gifCreator != null) {
             gifCreator.replaceGif(gifData, height?.toPx?.toInt(), width?.toPx?.toInt())
@@ -37,10 +37,15 @@ class GifManager {
     fun optimiseGifs() {
         val optimisationPercentage = remoteViewMemoryManager.getRecommendedSizeOptimisation()
         for (gifCreator in gifCreators) {
-            gifCreator.value.optimiseGifs(gifOptimisationStrategyMapping.getOrDefault(gifCreator.key,GifOptimisationStrategy.AUTOMATIC()), optimisationPercentage)
+            gifCreator.value.optimiseGifs(
+                gifOptimisationStrategyMapping.getOrDefault(
+                    gifCreator.key, GifOptimisationStrategy.AUTOMATIC()
+                ), optimisationPercentage
+            )
         }
 
     }
+
     fun populateGifs() {
         for (gifCreator in gifCreators) {
             gifCreator.value.populateGif()
