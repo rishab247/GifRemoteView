@@ -1,7 +1,6 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IdRes
 import java.math.RoundingMode
 import java.text.DecimalFormat

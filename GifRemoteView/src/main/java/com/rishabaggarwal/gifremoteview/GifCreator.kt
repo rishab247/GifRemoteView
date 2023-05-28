@@ -1,4 +1,4 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -7,7 +7,8 @@ import android.widget.RemoteViews
 import com.bumptech.glide.gifdecoder.StandardGifDecoder
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPoolAdapter
 import com.bumptech.glide.load.resource.gif.GifBitmapProvider
-import com.rishabAggarwal.gifremoteview.Config.optimisationRatio
+import com.rishabAggarwal.gifremoteview.toPx
+import com.rishabaggarwal.gifremoteview.Config.OptimisationRatio
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
@@ -56,7 +57,7 @@ class GifCreator(
         for (frame in frames) {
             val v = RemoteViews(packageName, R.layout.view_single_frame)
             v.setImageViewBitmap(R.id.frame, frame)
-            remoteView.setInt(R.id.frame_flipper, "setFlipInterval", timeBetweenFrame)
+            remoteView.setInt(viewId, "setFlipInterval", timeBetweenFrame)
             remoteView.addView(viewId, v)
         }
     }
@@ -68,9 +69,9 @@ class GifCreator(
         when (gifOptimisationStrategy) {
             is GifOptimisationStrategy.AUTOMATIC -> {
                 val reductionPercentage = 1 - optimisationPercentage
-                val frameOptimisationPercentage = reductionPercentage * optimisationRatio
+                val frameOptimisationPercentage = reductionPercentage * OptimisationRatio
                 val frameSizeOptimisationPercentagetemp =
-                    reductionPercentage * (1 - optimisationRatio)
+                    reductionPercentage * (1 - OptimisationRatio)
                 optimiseForQuality(1 - frameOptimisationPercentage)
 
                 optimiseForSmoothness(frameSizeOptimisationPercentagetemp)

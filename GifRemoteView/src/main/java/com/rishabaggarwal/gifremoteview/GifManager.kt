@@ -1,4 +1,6 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
+
+import com.rishabAggarwal.gifremoteview.toPx
 
 class GifManager {
     private lateinit var remoteViewMemoryManager: RemoteViewMemoryManager

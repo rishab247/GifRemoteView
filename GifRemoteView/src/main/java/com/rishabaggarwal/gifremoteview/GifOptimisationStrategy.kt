@@ -1,4 +1,4 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
 
 sealed class GifOptimisationStrategy {
     object OPTIMISE_SMOOTHNESS : GifOptimisationStrategy()
@@ -8,6 +8,6 @@ sealed class GifOptimisationStrategy {
     //Not Recommended
     object NONE : GifOptimisationStrategy()
     data class AUTOMATIC(
-        val optimisationRatio: Float = Config.optimisationRatio,
+        val optimisationRatio: Float = Config.OptimisationRatio,
     ) : GifOptimisationStrategy()
 }

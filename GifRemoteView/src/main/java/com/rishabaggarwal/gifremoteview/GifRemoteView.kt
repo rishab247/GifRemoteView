@@ -1,8 +1,7 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.IdRes

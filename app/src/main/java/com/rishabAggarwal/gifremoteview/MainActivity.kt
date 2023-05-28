@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
+import com.rishabaggarwal.gifremoteview.GifOptimisationStrategy
+import com.rishabaggarwal.gifremoteview.GifRemoteView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             .setPriority(NotificationCompat.PRIORITY_MAX)
 
         val bytes: ByteArray =
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.vinyl)
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
 
 
