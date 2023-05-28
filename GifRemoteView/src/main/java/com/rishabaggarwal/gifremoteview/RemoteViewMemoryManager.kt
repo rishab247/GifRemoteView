@@ -1,27 +1,15 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IdRes
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
 
 class RemoteViewMemoryManager {
-
-    /*  Functionality
-        store  size of individual gifcreator
-        store cumulative size of all gifcreator
-        get size optimisation percentage
-        limit the total size of remoteView
-
-     */
-
-
     companion object {
         const val MAX_SIZE = 5000000
         const val MAX_SIZE_EXCEPTION_CASE = 2000000
-
     }
 
     var currentSize = 0
@@ -50,11 +38,8 @@ class RemoteViewMemoryManager {
                 removeImage(image)
             }
             individualimageSize[viewId] = (individualimageSize[viewId] ?: 0) + image.byteCount
-            Log.e("TAG1", "addImage:$currentSize  ${individualimageSize[viewId]} image.byteCount ${image.byteCount}")
         }
         currentSize += image.byteCount
-        Log.e("TAG1", "addImage1: uuid  $uuid   currentSize ${currentSize}  individualimageSize${individualimageSize.size} viewid${individualimageSize[viewId] }   }")
-
     }
 
     fun removeImage(image: Bitmap, uuid: UUID) {
@@ -88,25 +73,17 @@ class RemoteViewMemoryManager {
     }
 
     fun getRecommendedSizeOptimisation(): Float {
-//todo excule normal image size from this calculation
         var totalGifSize = 0
         for (i in individualGifSize) {
             totalGifSize += i.value
-            Log.e("TAG1", "individualGifSize: ${i.key}  ${i.value}")
         }
         val sizeToBeReduced = currentSize - totalGifSize
 
-        val v = if (currentSize > currentMaxSize) {
+        return if (currentSize > currentMaxSize) {
             val df = DecimalFormat("#.###")
             df.roundingMode = RoundingMode.DOWN
             df.format((currentMaxSize - sizeToBeReduced).toFloat() / (currentSize)).toFloat()
         } else 1.toFloat()
-
-        Log.e(
-            "TAG",
-            "getRecommendedSizeOptimisation1: ${v}  ${currentMaxSize}   ${currentSize}   $sizeToBeReduced  totalGifSize  ${totalGifSize}   sizeToBeReduced ${sizeToBeReduced}",
-        )
-        return v
     }
 
     fun limitMaxSize() {
