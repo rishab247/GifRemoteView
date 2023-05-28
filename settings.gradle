@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "GifRemoteView"
-include ':app'
+include ':Sample'
 include ':GifRemoteView'
