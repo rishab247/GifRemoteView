@@ -22,4 +22,16 @@ Step 2. Add the dependency
 	        implementation 'com.github.rishab247:GifRemoteView:Tag'
 	}
 
+## Requirements
+GifRemoteView currently works on Android 7.1+ (API level 24).
+
+GifRemoteView depends on glide 4.11 to decode GIF File.
+
 ## How do I use GifRemoteView?
+
+
+## Sample
+### Single Gif
+<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/690515dd-fbbc-48ea-a6e2-6acc96ad7cf8" width="200" height="400" />
+
+
