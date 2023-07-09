@@ -178,7 +178,7 @@ class GifCreator(
         val optimisedArea = area * optimisationPercentage
         val ratio = height.toFloat() / width.toFloat()
         val newHeight = floor(sqrt(optimisedArea * ratio))
-        val df = DecimalFormat("#.###")
+        val df = DecimalFormat("#.####")
         df.roundingMode = RoundingMode.DOWN
         return df.format(newHeight / height).toFloat()
     }
