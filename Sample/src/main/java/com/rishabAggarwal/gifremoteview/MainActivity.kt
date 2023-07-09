@@ -78,20 +78,37 @@ class MainActivity : AppCompatActivity() {
         val bigRemoteViewstest =
             GifRemoteView(
                 applicationContext.packageName,
-                R.layout.notify,
+                R.layout.notify_12,
                 applicationContext,
                 limitRemoteViewSize = true
             )
         bigRemoteViewstest.addGif(
-            R.id.frame_flipper,
-            bytes,
+            R.id.frame_flipper1,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.four)
+                .skipMemoryCache(true).submit().get(),
             150,
             100,
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         bigRemoteViewstest.addGif(
-            R.id.frame_flipper,
+            R.id.frame_flipper2,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.one)
+                .skipMemoryCache(true).submit().get(),
+            150,
+            100,
+            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+        )
+        bigRemoteViewstest.addGif(
+            R.id.frame_flipper3,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.two)
+                .skipMemoryCache(true).submit().get(),
+            150,
+            100,
+            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+        )
+        bigRemoteViewstest.addGif(
+            R.id.frame_flipper4,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.three)
                 .skipMemoryCache(true).submit().get(),
             150,
             100,

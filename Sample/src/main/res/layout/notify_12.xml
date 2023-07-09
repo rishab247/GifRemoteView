@@ -6,48 +6,7 @@
 
     android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/ll_text"
-        android:layout_width="190dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
 
-        android:gravity="start"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title"
-            style="@style/TextAppearance.Compat.Notification.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="Title of the notification" />
-
-        <TextView
-            android:id="@+id/text"
-            style="@style/TextAppearance.Compat.Notification.Info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-
-            tools:text="Description of the notification" />
-
-    </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="144dp"
-        android:layout_height="359dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:scaleType="centerCrop"  />
 
     <ViewFlipper
         android:id="@+id/frame_flipper"
@@ -55,18 +14,49 @@
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
         android:autoStart="true" />
-    <ImageView
-        android:id="@+id/image1"
-        android:layout_width="385dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="-80dp"
-        android:scaleType="centerCrop" />
-    <ImageView
-        android:id="@+id/image2"
-        android:layout_width="385dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="0dp"
-        android:scaleType="centerCrop" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="50dp"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/frame_flipper1"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/frame_flipper1"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/frame_flipper3"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@+id/frame_flipper2"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper5"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:autoStart="true" />
+
 </RelativeLayout>
