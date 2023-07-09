@@ -3,11 +3,12 @@ package com.rishabaggarwal.gifremoteview
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Build
+import android.util.Log
 import android.widget.RemoteViews
 import com.bumptech.glide.gifdecoder.StandardGifDecoder
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPoolAdapter
 import com.bumptech.glide.load.resource.gif.GifBitmapProvider
-import com.rishabAggarwal.gifremoteview.toPx
+import com.rishabaggarwal.gifremoteview.utils.toPx
 import com.rishabaggarwal.gifremoteview.Config.OptimisationRatio
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -156,7 +157,8 @@ class GifCreator(
             newWidth = (newHeight / ratio).toInt()
         }
 
-        return Bitmap.createBitmap(this, 0, 0, newWidth, newHeight, Matrix(), false)
+        return Bitmap.createScaledBitmap(this, newWidth, newHeight, true)
+            .copy(Bitmap.Config.RGB_565, true)
     }
 
     private fun Bitmap.getCompressedFrame(newWidth: Int, newHeight: Int): Bitmap? {
@@ -166,10 +168,10 @@ class GifCreator(
     private fun Bitmap.getCompressedFrame(optimisationPercentage: Float): Bitmap {
         val scalingFactor = getScalingFactor(width, height, optimisationPercentage)
 
-
-        val mat = Matrix()
-        mat.setScale(scalingFactor, scalingFactor);
-        return Bitmap.createBitmap(this, 0, 0, width, height, mat, false)
+        return Bitmap.createScaledBitmap(
+            this, (scalingFactor * width).toInt(),
+            (scalingFactor * height).toInt(), true
+        )
 
     }
 

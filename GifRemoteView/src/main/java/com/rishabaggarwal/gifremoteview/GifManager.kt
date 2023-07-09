@@ -1,6 +1,7 @@
 package com.rishabaggarwal.gifremoteview
 
-import com.rishabAggarwal.gifremoteview.toPx
+import android.util.Log
+import com.rishabaggarwal.gifremoteview.utils.toPx
 
 class GifManager {
     private lateinit var remoteViewMemoryManager: RemoteViewMemoryManager
@@ -38,6 +39,7 @@ class GifManager {
 
     fun optimiseGifs() {
         val optimisationPercentage = remoteViewMemoryManager.getRecommendedSizeOptimisation()
+        Log.e("TAG1", "optimiseGifs: ${optimisationPercentage}   ${remoteViewMemoryManager.currentSize}", )
         for (gifCreator in gifCreators) {
             gifCreator.value.optimiseGifs(
                 gifOptimisationStrategyMapping.getOrDefault(

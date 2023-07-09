@@ -1,4 +1,4 @@
-package com.rishabAggarwal.gifremoteview
+package com.rishabaggarwal.gifremoteview.utils
 
 import android.content.res.Resources
 import android.util.TypedValue

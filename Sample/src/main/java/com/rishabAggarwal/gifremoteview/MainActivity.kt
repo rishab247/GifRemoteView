@@ -90,8 +90,9 @@ class MainActivity : AppCompatActivity() {
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         bigRemoteViewstest.addGif(
-            R.id.frame_flipperq,
-            bytes,
+            R.id.frame_flipper,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.one)
+                .skipMemoryCache(true).submit().get(),
             150,
             100,
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS

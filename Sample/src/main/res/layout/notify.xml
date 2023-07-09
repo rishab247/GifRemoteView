@@ -16,7 +16,7 @@
         android:inAnimation="@null"
         android:outAnimation="@null" />
 
-     <ViewFlipper
+    <ViewFlipper
         android:id="@+id/frame_flipperq"
         android:layout_width="150dp"
         android:layout_height="100dp"
@@ -27,24 +27,5 @@
         android:flipInterval="50"
         android:inAnimation="@null"
         android:outAnimation="@null" />
-
-
-    <ImageView
-        android:id="@+id/image1"
-        android:layout_width="385dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="-80dp"
-        android:scaleType="centerCrop"
-         android:layout_toStartOf="@+id/frame_flipperq" />
-    <ImageView
-        android:id="@+id/image2"
-        android:layout_width="385dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="0dp"
-        android:background="#000"
-        android:scaleType="centerCrop"
-        android:layout_toStartOf="@+id/frame_flipperq" />
 
 </RelativeLayout>
