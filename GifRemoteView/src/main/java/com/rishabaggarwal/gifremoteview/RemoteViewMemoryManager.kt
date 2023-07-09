@@ -80,7 +80,7 @@ class RemoteViewMemoryManager {
         val sizeToBeReduced = currentSize - totalGifSize
 
         return if (currentSize > currentMaxSize) {
-            val df = DecimalFormat("#.###")
+            val df = DecimalFormat("#.####")
             df.roundingMode = RoundingMode.DOWN
             df.format((currentMaxSize - sizeToBeReduced).toFloat() / (currentSize)).toFloat()
         } else 1.toFloat()
