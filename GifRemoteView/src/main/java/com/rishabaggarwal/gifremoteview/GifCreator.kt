@@ -34,6 +34,7 @@ class GifCreator(
 
     fun replaceGif(gifData: ByteArray, height: Int? = null, width: Int? = null) {
         remoteViewMemoryManager.removeGif(identifier)
+        frames.clear()
         setupGif(gifData, height, width)
     }
 
