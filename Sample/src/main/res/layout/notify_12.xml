@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+
+    android:orientation="horizontal">
+
+
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="50dp"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/frame_flipper1"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/frame_flipper1"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/frame_flipper3"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@+id/frame_flipper2"
+        android:autoStart="true" />
+
+    <ViewFlipper
+        android:id="@+id/frame_flipper5"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:autoStart="true" />
+
+</RelativeLayout>
