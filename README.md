@@ -19,7 +19,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.rishab247:GifRemoteView:Tag'
+	        implementation 'com.github.rishab247:GifRemoteView:ReleaseTag'
 	}
 
 ## Requirements
@@ -32,6 +32,8 @@ GifRemoteView depends on glide 4.11 to decode GIF File.
 
 ## Sample
 ### Single Gif
-<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/690515dd-fbbc-48ea-a6e2-6acc96ad7cf8" width="200" height="400" />
-
+<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/690515dd-fbbc-48ea-a6e2-6acc96ad7cf8" width="240" height="500" />
+<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/d2ee6867-d3b4-4dd8-8006-a53eb01eb7d9" width="240" height="500" />
+<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/cc3639d6-9248-4acb-86f0-5643982b0a3a" width="240" height="500" />
+<img src="https://github.com/rishab247/GifRemoteView/assets/47221639/a5d82f19-4540-4349-9bdc-fe852ec4c8a7" width="240" height="500" />
 
