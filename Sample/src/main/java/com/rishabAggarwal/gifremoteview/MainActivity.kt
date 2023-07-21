@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
-        var channel = NotificationChannel(
+        val channel = NotificationChannel(
             "Channel_ID_DEFAULT", "test", NotificationManager.IMPORTANCE_HIGH
         )
 
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun fireNotification(applicationContext: Context) {
+    private fun fireNotification(applicationContext: Context) {
 
         val builder = NotificationCompat.Builder(applicationContext, "Channel_ID_DEFAULT")
             .setSmallIcon(android.R.drawable.ic_menu_search)
@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_12,
-                applicationContext,
                 limitRemoteViewSize = true
             )
         bigRemoteViewstest.addGif(
