@@ -1,6 +1,7 @@
 package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.annotation.IdRes
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -8,8 +9,8 @@ import java.util.UUID
 
 class RemoteViewMemoryManager {
     companion object {
-        const val MAX_SIZE = 5000000
-        const val MAX_SIZE_EXCEPTION_CASE = 2000000
+        const val MAX_SIZE = 5000000L
+        const val MAX_SIZE_EXCEPTION_CASE = 2000000L
     }
 
     var currentSize = 0
@@ -88,6 +89,11 @@ class RemoteViewMemoryManager {
 
     fun limitMaxSize() {
         currentMaxSize = MAX_SIZE_EXCEPTION_CASE
+    }
+
+    fun setMaxGifSize(size:Long){
+
+        currentMaxSize = size
     }
 
 

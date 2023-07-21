@@ -89,11 +89,14 @@ class GifCreator(
 
             }
 
-            GifOptimisationStrategy.OPTIMISE_LENGTH -> {
-                //TODO
-            }
+//            GifOptimisationStrategy.OPTIMISE_LENGTH -> {
+//                //coming Soon
+//            }
 
             GifOptimisationStrategy.NONE -> {
+                if(optimisationPercentage<1f){
+                    Log.w("GifRemoteView", "Please select OptimisationStrategy", )
+                }
                 return
             }
 

@@ -1,6 +1,5 @@
 package com.rishabaggarwal.gifremoteview
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import android.widget.RemoteViews
@@ -9,10 +8,9 @@ import kotlin.jvm.Throws
 
 
 class GifRemoteView constructor(
-    packageName: String,
+    private val packageName: String,
     layoutId: Int,
-    private val applicationContext: Context,
-    private val limitRemoteViewSize: Boolean = false
+    private val limitRemoteViewSize: Boolean = true
 ) : RemoteViews(packageName, layoutId) {
     private val remoteViewMemoryManager: RemoteViewMemoryManager = RemoteViewMemoryManager()
     private val gifManager: GifManager = GifManager()
@@ -22,7 +20,7 @@ class GifRemoteView constructor(
     }
 
     @Throws(OutOfMemoryError::class)
-    public fun addGif(
+    fun addGif(
         viewId: Int, bytes: ByteArray, height: Int? = null,
         width: Int? = null,
         gifOptimisationStrategy: GifOptimisationStrategy = GifOptimisationStrategy.AUTOMATIC()
@@ -36,20 +34,23 @@ class GifRemoteView constructor(
         gifManager.addGif(
             viewId,
             bytes,
-            applicationContext.packageName,
+            packageName,
             this,
             height,
             width,
             gifOptimisationStrategy = gifOptimisationStrategy,
             remoteViewMemoryManager
         )
-
-
     }
 
     fun publishGifs() {
         gifManager.optimiseGifs()
         gifManager.populateGifs()
+    }
+
+
+    fun setMaxRemoteViewSize(size: Long) {
+        gifManager.setMaxRemoteViewSize(size)
     }
 
     override fun setImageViewBitmap(@IdRes viewId: Int, bitmap: Bitmap) {
@@ -66,5 +67,4 @@ class GifRemoteView constructor(
         if (limitRemoteViewSize)
             remoteViewMemoryManager.limitMaxSize()
     }
-
 }
