@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
-        var channel = NotificationChannel(
+        val channel = NotificationChannel(
             "Channel_ID_DEFAULT", "test", NotificationManager.IMPORTANCE_HIGH
         )
 
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun fireNotification(applicationContext: Context) {
+    private fun fireNotification(applicationContext: Context) {
 
         val builder = NotificationCompat.Builder(applicationContext, "Channel_ID_DEFAULT")
             .setSmallIcon(android.R.drawable.ic_menu_search)
@@ -61,15 +61,14 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_collapsed_view_flipper,
-                applicationContext,
                 limitRemoteViewSize = true
             )
 
         smallRemoteViews.addGif(
             R.id.frame_flipper,
             bytes,
-            150,
-            150,
+            250,
+            250,
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         smallRemoteViews.publishGifs()
@@ -79,39 +78,39 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_12,
-                applicationContext,
                 limitRemoteViewSize = true
             )
+
+
+
+
+
         bigRemoteViewstest.addGif(
-            R.id.frame_flipper1,
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.four)
+            R.id.frame_flipper5,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.clickme)
                 .skipMemoryCache(true).submit().get(),
-            150,
-            100,
+            gifOptimisationStrategy=
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         bigRemoteViewstest.addGif(
             R.id.frame_flipper2,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.one)
                 .skipMemoryCache(true).submit().get(),
-            150,
-            100,
+            gifOptimisationStrategy=
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         bigRemoteViewstest.addGif(
             R.id.frame_flipper3,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.two)
                 .skipMemoryCache(true).submit().get(),
-            150,
-            100,
+            gifOptimisationStrategy=
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
         bigRemoteViewstest.addGif(
             R.id.frame_flipper4,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.three)
                 .skipMemoryCache(true).submit().get(),
-            150,
-            100,
+            gifOptimisationStrategy=
             GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
         )
 

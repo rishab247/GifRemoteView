@@ -55,7 +55,7 @@ class GifManager {
             gifCreator.value.populateGif()
         }
     }
-    fun setMaxGifSize(size:Long){
+    fun setMaxRemoteViewSize(size:Long){
         if (size >= RemoteViewMemoryManager.MAX_SIZE) {
             Log.w("GifRemoteView:", "App stability can not be assured if size of increased beyond MAX_SIZE ")
         }
