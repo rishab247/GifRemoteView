@@ -1,10 +1,8 @@
 package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IdRes
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import com.rishabaggarwal.gifremoteview.utils.formatData
 import java.util.UUID
 
 class RemoteViewMemoryManager {
@@ -81,9 +79,7 @@ class RemoteViewMemoryManager {
         val sizeToBeReduced = currentSize - totalGifSize
 
         return if (currentSize > currentMaxSize) {
-            val df = DecimalFormat("#.####")
-            df.roundingMode = RoundingMode.DOWN
-            df.format((currentMaxSize - sizeToBeReduced).toFloat() / (currentSize)).toFloat()
+            formatData((currentMaxSize - sizeToBeReduced).toFloat() / (currentSize))
         } else 1.toFloat()
     }
 

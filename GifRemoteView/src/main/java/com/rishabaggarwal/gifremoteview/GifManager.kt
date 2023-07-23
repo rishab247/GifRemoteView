@@ -39,7 +39,6 @@ class GifManager {
 
     fun optimiseGifs() {
         val optimisationPercentage = remoteViewMemoryManager.getRecommendedSizeOptimisation()
-        Log.e("TAG1", "optimiseGifs: ${optimisationPercentage}   ${remoteViewMemoryManager.currentSize}", )
         for (gifCreator in gifCreators) {
             gifCreator.value.optimiseGifs(
                 gifOptimisationStrategyMapping.getOrDefault(
