@@ -3,15 +3,11 @@ package com.rishabaggarwal.gifremoteview
 import android.util.Log
 import com.rishabaggarwal.gifremoteview.utils.toPx
 
-class GifManager {
+internal class GifManager {
     private lateinit var remoteViewMemoryManager: RemoteViewMemoryManager
     private val gifCreators: HashMap<Int, GifCreator> = hashMapOf()
     private val gifOptimisationStrategyMapping: HashMap<Int, GifOptimisationStrategy> = hashMapOf()
 
-    /*
-    height- is the max height in the dp
-    width- is the max width in the dp
-     */
     fun addGif(
         viewId: Int,
         gifData: ByteArray,

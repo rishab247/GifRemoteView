@@ -5,7 +5,7 @@ import androidx.annotation.IdRes
 import com.rishabaggarwal.gifremoteview.utils.formatData
 import java.util.UUID
 
-class RemoteViewMemoryManager {
+internal class RemoteViewMemoryManager {
     companion object {
         const val MAX_SIZE = 5000000L
         const val MAX_SIZE_EXCEPTION_CASE = 2000000L
@@ -87,8 +87,7 @@ class RemoteViewMemoryManager {
         currentMaxSize = MAX_SIZE_EXCEPTION_CASE
     }
 
-    fun setMaxGifSize(size:Long){
-
+    fun setMaxGifSize(size: Long) {
         currentMaxSize = size
     }
 

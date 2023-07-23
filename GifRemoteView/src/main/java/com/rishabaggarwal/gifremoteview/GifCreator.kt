@@ -18,7 +18,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.sqrt
 
-class GifCreator(
+internal class GifCreator(
     private var viewId: Int,
     private var packageName: String,
     private var remoteViewMemoryManager: RemoteViewMemoryManager,
