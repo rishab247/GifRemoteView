@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_collapsed,
-                limitRemoteViewSize = true
             )
 
         collapsedRemoteView.addGif(
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         val collapsedRemoteView =
             GifRemoteView(
                 applicationContext.packageName,
-                R.layout.notify_collapsed,
+                R.layout.notify_collapsed
             )
 
         collapsedRemoteView.addGif(
