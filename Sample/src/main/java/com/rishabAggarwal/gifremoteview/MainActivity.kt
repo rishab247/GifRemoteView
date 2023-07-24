@@ -22,31 +22,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val viewFlipperNotificationButton = findViewById<Button>(R.id.view_flipper_notification)
-        viewFlipperNotificationButton.setOnClickListener {
-            CoroutineScope(SupervisorJob()).launch {
-                fireNotification(applicationContext)
-            }
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
-    }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            "Channel_ID_DEFAULT", "test", NotificationManager.IMPORTANCE_HIGH
-        )
-
-        channel.description = "messageBody"
-        with(NotificationManagerCompat.from(applicationContext)) {
-            createNotificationChannel(channel)
+        val viewFlipperNotificationButton = findViewById<Button>(R.id.view_flipper_notification)
+        viewFlipperNotificationButton.setOnClickListener {
+            CoroutineScope(SupervisorJob()).launch {
+                fireOneGifNotification(applicationContext)
+                fireMultipleGifNotification(applicationContext)
+            }
         }
     }
 
-    private fun fireNotification(applicationContext: Context) {
+    private fun fireMultipleGifNotification(applicationContext: Context) {
 
         val builder = NotificationCompat.Builder(applicationContext, "Channel_ID_DEFAULT")
             .setSmallIcon(android.R.drawable.ic_menu_search)
@@ -56,71 +45,112 @@ class MainActivity : AppCompatActivity() {
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
                 .skipMemoryCache(true).submit().get()
 
-
-        val smallRemoteViews =
+        val collapsedRemoteView =
             GifRemoteView(
                 applicationContext.packageName,
-                R.layout.notify_collapsed_view_flipper,
+                R.layout.notify_collapsed,
                 limitRemoteViewSize = true
             )
 
-        smallRemoteViews.addGif(
+        collapsedRemoteView.addGif(
             R.id.frame_flipper,
-            bytes,
-            250,
-            250,
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+            bytes
         )
-        smallRemoteViews.publishGifs()
+        collapsedRemoteView.publishGifs()
 
 
-        val bigRemoteViewstest =
+        val expandedRemoteView =
             GifRemoteView(
                 applicationContext.packageName,
-                R.layout.notify_12,
-                limitRemoteViewSize = true
+                R.layout.notify_expanded,
             )
-
-
-
-
-
-        bigRemoteViewstest.addGif(
-            R.id.frame_flipper5,
-            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.clickme)
-                .skipMemoryCache(true).submit().get(),
-            gifOptimisationStrategy=
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
-        )
-        bigRemoteViewstest.addGif(
-            R.id.frame_flipper2,
+        expandedRemoteView.addGif(
+            R.id.frame_flipper1,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.one)
-                .skipMemoryCache(true).submit().get(),
-            gifOptimisationStrategy=
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+                .skipMemoryCache(true).submit().get()
         )
-        bigRemoteViewstest.addGif(
-            R.id.frame_flipper3,
+        expandedRemoteView.addGif(
+            R.id.frame_flipper2,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.two)
-                .skipMemoryCache(true).submit().get(),
-            gifOptimisationStrategy=
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+                .skipMemoryCache(true).submit().get()
         )
-        bigRemoteViewstest.addGif(
-            R.id.frame_flipper4,
+        expandedRemoteView.addGif(
+            R.id.frame_flipper3,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.three)
                 .skipMemoryCache(true).submit().get(),
-            gifOptimisationStrategy=
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+            gifOptimisationStrategy = GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+        )
+        expandedRemoteView.addGif(
+            R.id.frame_flipper4,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.four)
+                .skipMemoryCache(true).submit().get(),
         )
 
 
-        bigRemoteViewstest.publishGifs()
-        builder.setCustomBigContentView(bigRemoteViewstest)
-        builder.setCustomContentView(smallRemoteViews)
-        builder.setCustomHeadsUpContentView(smallRemoteViews)
+        expandedRemoteView.publishGifs()
+        builder.setCustomBigContentView(expandedRemoteView)
+        builder.setCustomContentView(collapsedRemoteView)
+        builder.setCustomHeadsUpContentView(collapsedRemoteView)
         with(NotificationManagerCompat.from(applicationContext)) {
-            notify(222, builder.build())
+            notify((1..10000).random(), builder.build())
+        }
+    }
+
+    private fun fireOneGifNotification(applicationContext: Context) {
+
+        val builder = NotificationCompat.Builder(applicationContext, "Channel_ID_DEFAULT")
+            .setSmallIcon(android.R.drawable.ic_menu_search)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+
+        val bytes: ByteArray =
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
+                .skipMemoryCache(true).submit().get()
+
+        val collapsedRemoteView =
+            GifRemoteView(
+                applicationContext.packageName,
+                R.layout.notify_collapsed,
+            )
+
+        collapsedRemoteView.addGif(
+            R.id.frame_flipper,
+            bytes
+        )
+
+
+        collapsedRemoteView.publishGifs()
+
+
+        val expandedRemoteView =
+            GifRemoteView(
+                applicationContext.packageName,
+                R.layout.notify_expanded,
+                limitRemoteViewSize = true
+            )
+        expandedRemoteView.addGif(
+            R.id.frame_flipper5,
+            Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.response)
+                .skipMemoryCache(true).submit().get()
+        )
+
+
+
+        expandedRemoteView.publishGifs()
+        builder.setCustomBigContentView(expandedRemoteView)
+        builder.setCustomContentView(collapsedRemoteView)
+        builder.setCustomHeadsUpContentView(collapsedRemoteView)
+        with(NotificationManagerCompat.from(applicationContext)) {
+            notify((1..10000).random(), builder.build())
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            "Channel_ID_DEFAULT", "test", NotificationManager.IMPORTANCE_HIGH
+        )
+        with(NotificationManagerCompat.from(applicationContext)) {
+            createNotificationChannel(channel)
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.rishabaggarwal.gifremoteview
 
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
@@ -10,14 +9,16 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPoolAdapter
 import com.bumptech.glide.load.resource.gif.GifBitmapProvider
 import com.rishabaggarwal.gifremoteview.utils.toPx
 import com.rishabaggarwal.gifremoteview.Config.OptimisationRatio
+import com.rishabaggarwal.gifremoteview.utils.formatData
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.stream.IntStream.range
 import kotlin.math.floor
+import kotlin.math.min
 import kotlin.math.sqrt
 
-class GifCreator(
+internal class GifCreator(
     private var viewId: Int,
     private var packageName: String,
     private var remoteViewMemoryManager: RemoteViewMemoryManager,
@@ -65,41 +66,47 @@ class GifCreator(
     }
 
     fun optimiseGifs(
-        gifOptimisationStrategy: GifOptimisationStrategy,
-        optimisationPercentage: Float
+        gifOptimisationStrategy: GifOptimisationStrategy, optimisationPercentage: Float
     ) {
-        when (gifOptimisationStrategy) {
-            is GifOptimisationStrategy.AUTOMATIC -> {
-                val reductionPercentage = 1 - optimisationPercentage
-                val frameOptimisationPercentage = reductionPercentage * OptimisationRatio
-                val frameSizeOptimisationPercentagetemp =
-                    reductionPercentage * (1 - OptimisationRatio)
-                optimiseForQuality(1 - frameOptimisationPercentage)
+        if (optimisationPercentage < 1.0) {
+            when (gifOptimisationStrategy) {
+                is GifOptimisationStrategy.AUTOMATIC -> {
+                    val partialOptimiseForQualityPercentage = formatData(
+                        Math.pow(
+                            optimisationPercentage.toDouble(), OptimisationRatio.toDouble()
+                        )
+                    ).toFloat()
+                    val partialOptimiseForSmoothnessPercentage = formatData(
+                        Math.pow(
+                            optimisationPercentage.toDouble(), (1 - OptimisationRatio).toDouble()
+                        )
+                    ).toFloat()
+                    optimiseForQuality(partialOptimiseForQualityPercentage)
+                    optimiseForSmoothness(partialOptimiseForSmoothnessPercentage)
+                }
 
-                optimiseForSmoothness(frameSizeOptimisationPercentagetemp)
-            }
-
-            GifOptimisationStrategy.OPTIMISE_QUALITY -> {
-                optimiseForQuality(optimisationPercentage)
-            }
+                GifOptimisationStrategy.OPTIMISE_QUALITY -> {
+                    optimiseForQuality(optimisationPercentage)
+                }
 
 
-            GifOptimisationStrategy.OPTIMISE_SMOOTHNESS -> {
-                optimiseForSmoothness(optimisationPercentage)
+                GifOptimisationStrategy.OPTIMISE_SMOOTHNESS -> {
+                    optimiseForSmoothness(optimisationPercentage)
 
-            }
+                }
 
 //            GifOptimisationStrategy.OPTIMISE_LENGTH -> {
 //                //coming Soon
 //            }
 
-            GifOptimisationStrategy.NONE -> {
-                if(optimisationPercentage<1f){
-                    Log.w("GifRemoteView", "Please select OptimisationStrategy", )
+                GifOptimisationStrategy.NONE -> {
+                    if (optimisationPercentage < 1f) {
+                        Log.w("GifRemoteView", "Please select OptimisationStrategy")
+                    }
+                    return
                 }
-                return
-            }
 
+            }
         }
     }
 
@@ -152,7 +159,10 @@ class GifCreator(
     private fun Bitmap.getOptimisationFrame(height: Int? = null): Bitmap {
         // Basically shrinking it to max possible size
         var newWidth = 0
-        var newHeight = height ?: getMaxHeightInPixel()
+        var newHeight = height
+        if (newHeight == null || newHeight == 0) {
+            newHeight = min(getMaxHeightInPixel(), this.height)
+        }
         if (this.height < newHeight) {
             newWidth = this.width
             newHeight = this.height
@@ -160,26 +170,22 @@ class GifCreator(
             val ratio: Float = (this.height.toFloat() / this.width.toFloat())
             newWidth = (newHeight / ratio).toInt()
         }
-
         return Bitmap.createScaledBitmap(this, newWidth, newHeight, true)
             .copy(Bitmap.Config.RGB_565, true)
     }
 
-    private fun Bitmap.getCompressedFrame(newWidth: Int, newHeight: Int): Bitmap? {
-        return Bitmap.createScaledBitmap(this, newWidth, newHeight, false)
-    }
 
     private fun Bitmap.getCompressedFrame(optimisationPercentage: Float): Bitmap {
         val scalingFactor = getScalingFactor(width, height, optimisationPercentage)
-
         return Bitmap.createScaledBitmap(
-            this, (scalingFactor * width).toInt(),
-            (scalingFactor * height).toInt(), true
+            this, (scalingFactor * width).toInt(), (scalingFactor * height).toInt(), true
         )
 
     }
 
-    private fun getScalingFactor(width: Int, height: Int, optimisationPercentage: Float): Float {
+    private fun getScalingFactor(
+        width: Int, height: Int, optimisationPercentage: Float
+    ): Float {
         val area = width * height
         val optimisedArea = area * optimisationPercentage
         val ratio = height.toFloat() / width.toFloat()
