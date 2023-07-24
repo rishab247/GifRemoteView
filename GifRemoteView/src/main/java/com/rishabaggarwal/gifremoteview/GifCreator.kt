@@ -90,12 +90,12 @@ internal class GifCreator(
                 }
 
 
-                GifOptimisationStrategy.OPTIMISE_SMOOTHNESS -> {
+                GifOptimisationStrategy.OPTIMISE_LENGTH -> {
                     optimiseForSmoothness(optimisationPercentage)
 
                 }
 
-//            GifOptimisationStrategy.OPTIMISE_LENGTH -> {
+//            GifOptimisationStrategy.OPTIMISE_CONTENT -> {
 //                //coming Soon
 //            }
 

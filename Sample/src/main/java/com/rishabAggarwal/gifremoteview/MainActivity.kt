@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             R.id.frame_flipper3,
             Glide.with(applicationContext).`as`(ByteArray::class.java).load(R.raw.three)
                 .skipMemoryCache(true).submit().get(),
-            gifOptimisationStrategy = GifOptimisationStrategy.OPTIMISE_SMOOTHNESS
+            gifOptimisationStrategy = GifOptimisationStrategy.OPTIMISE_LENGTH
         )
         expandedRemoteView.addGif(
             R.id.frame_flipper4,
