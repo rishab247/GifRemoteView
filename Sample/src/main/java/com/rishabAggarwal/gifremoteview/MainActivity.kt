@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_collapsed,
-                limitRemoteViewSize = true
+                applicationContext,
             )
 
         collapsedRemoteView.addGif(
@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_expanded,
+                applicationContext
             )
         expandedRemoteView.addGif(
             R.id.frame_flipper1,
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_collapsed,
+                applicationContext
             )
 
         collapsedRemoteView.addGif(
@@ -125,6 +127,7 @@ class MainActivity : AppCompatActivity() {
             GifRemoteView(
                 applicationContext.packageName,
                 R.layout.notify_expanded,
+                applicationContext,
                 limitRemoteViewSize = true
             )
         expandedRemoteView.addGif(
