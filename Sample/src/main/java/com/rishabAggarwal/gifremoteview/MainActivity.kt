@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         viewFlipperNotificationButton.setOnClickListener {
             CoroutineScope(SupervisorJob()).launch {
                 fireOneGifNotification(applicationContext)
-                fireFourGifNotification(applicationContext)
+                fireMultipleGifNotification(applicationContext)
             }
         }
     }
 
-    private fun fireFourGifNotification(applicationContext: Context) {
+    private fun fireMultipleGifNotification(applicationContext: Context) {
 
         val builder = NotificationCompat.Builder(applicationContext, "Channel_ID_DEFAULT")
             .setSmallIcon(android.R.drawable.ic_menu_search)
