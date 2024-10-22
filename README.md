@@ -1,8 +1,8 @@
 # GifRemoteView
 [![](https://jitpack.io/v/rishab247/GifRemoteView.svg)](https://jitpack.io/#rishab247/GifRemoteView)
 
-## what is GifRemoteView?
-A Simple Android library made on top of Remoteview to show Gifs inside notifications.
+## What is GifRemoteView?
+A simple Android library is made on Remoteview to show GIFs/videos/animations inside notifications.
 
 ## Sample
 
@@ -28,20 +28,19 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.rishab247:GifRemoteView:ReleaseTag'
+	        implementation 'com.github.rishab247:GifRemoteView:$ReleaseTag'
 	}
 
 ## Requirements
-
-Android device Must be on  Android 7.1+ (API level 24).
-The project must have support for glide 4.11 to decode GIF files.
-The size of individual Gifs should not exceed 1MB otherwise it will throw a OutOfMemoryError Try to keep it under 100KBs for better results.
+- Android device Must be on  Android 7.1+ (API level 24).
+- The project must have support for glide 4.11 to decode GIF files.
+- The size of individual GIFs should not exceed 1MB otherwise it will throw an OutOfMemoryError Try to keep it under 100 KBs for better results.
 
 ## How do I use GifRemoteView?
-1. Declare a ViewFlipper inside your view hierarchy to show Gif/Animations. Make sure autoStart is set to true otherwise Gif won't play
+1. Declare a ViewFlipper inside your view hierarchy to show GIFs/Videos/Animations. Make sure autoStart is set to true otherwise Gif won't play
 
 		<ViewFlipper
-		android:id="@+id/frame_flipper1"
+		android:id="@+id/frame_flipper"
 		android:layout_width="80dp"
 		android:layout_height="80dp"
 		android:autoStart="true" />
@@ -54,16 +53,16 @@ The size of individual Gifs should not exceed 1MB otherwise it will throw a OutO
                 limitRemoteViewSize = true
             )
 
-3. Call addGif() for adding gifs in remoteview.
+3. Call addGif() to add gifs in remote view.
    	
-   		gifRemoteView.addGif(R.id.frame_flipper1, gifDataInBytes)
+   		gifRemoteView.addGif(R.id.frame_flipper, gifDataInBytes)
    
 4. Must Call publishGifs() for Post Processing.
    	
    		gifRemoteView.publishGifs()
    
 ## Additional Functionality
-   - GifRemoteView Constructor Gives additional argument limitRemoteViewSize which is set to true by default limiting the max size of remoteview to 2000000 bytes. Because some OEMS limits the size of the remoteview allowed in the system tray but if your device is lower than Android 13 or has OEMs that allow default remoteview size then the size of remoteview can be increased to 5000000 bytes by the limitRemoteViewSize to false.
+   - GifRemoteView Constructor Gives additional argument limitRemoteViewSize which is set to true by default limiting the max size of remoteview to 2000000 bytes. Because some OEMS limit the size of the remoteview allowed in the system tray but if your device is lower than Android 13 or has OEMs that allow default remoteview size then the size of remoteview can be increased to 5000000 bytes by the limitRemoteViewSize to false.
    - setMaxRemoteViewSize() function provides functionality to increase remoteview size beyond 5000000 bytes for the device below Android 12 but it takes a significant toll on performance and is not recommended.
    - addGif() Gives developer control over the max size a gif can take and help in further optimization of quality.
    - addGif() Gives developer control of how a Gif should be optimized using the gifOptimisationStrategy variable. There are three different types of optimization available which is applicable when a gif remoteview is consuming more memory than Allowed.
